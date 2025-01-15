@@ -1,0 +1,26 @@
+# Visual Studio 관련
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# 빌드 출력 디렉토리
+bin/
+obj/
+
+# 프로젝트 잠금 파일
+*.lock.json
+
+# 로그 파일
+*.log
+
+# 사용자 환경 파일
+.idea/
+.vscode/
+Thumbs.db
+desktop.ini
+
+# 기타 캐시
+*.cache
+*.pyc
