@@ -1,6 +1,8 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
+using Project.Data;
+using Project.Views;
 
 namespace Project
 {
@@ -11,5 +13,4 @@ namespace Project
     {
 
     }
-
 }
