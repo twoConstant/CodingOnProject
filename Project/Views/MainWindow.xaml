@@ -7,7 +7,33 @@
         xmlns:local="clr-namespace:Project"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="10">
+        <StackPanel>
+            <!-- Title -->
+            <TextBlock Text="Machine Information" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" />
+
+            <!-- Machine ID 입력 -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Machine ID:" VerticalAlignment="Center" Margin="0,0,10,0" />
+                <TextBox x:Name="MachineIdInput" Width="200" />
+                <Button Content="Load" Margin="10,0,0,0" Click="OnLoadButtonClick" />
+            </StackPanel>
+
+            <!-- Machine 데이터 표시 -->
+            <TextBlock Text="Machine ID:" />
+            <TextBlock Text="{Binding Machine.MachineId}" />
+
+            <TextBlock Text="Device ID:" />
+            <TextBlock Text="{Binding Machine.DeviceId}" />
+
+            <TextBlock Text="Manufacturer:" />
+            <TextBlock Text="{Binding Machine.DeviceManufacturer}" />
+
+            <TextBlock Text="Device Name:" />
+            <TextBlock Text="{Binding Machine.DeviceName}" />
+
+            <TextBlock Text="Type:" />
+            <TextBlock Text="{Binding Machine.Type}" />
+        </StackPanel>
     </Grid>
 </Window>

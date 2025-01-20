@@ -9,6 +9,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
+using Project.Repository;
+using Project.ViewModels;
 
 namespace Project.Views
 {
@@ -17,9 +19,34 @@ namespace Project.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MachineViewModel _viewModel;
+
         public MainWindow()
         {
-            InitializeComponent();           
+            InitializeComponent();
+
+            // Repository와 ViewModel 초기화
+            IMachineRepository repository = new MachineRepository();
+            MachineViewModel viewModel = new MachineViewModel(repository);
+            _viewModel = viewModel;
+
+            // ViewModel을 DataContext에 바인딩
+            DataContext = _viewModel;
+        }
+
+        private void OnLoadButtonClick(object sender, RoutedEventArgs e)
+        {
+            int machineId;
+
+            // 입력값 검증
+            if (int.TryParse(MachineIdInput.Text, out machineId))
+            {
+                _viewModel.LoadMachineById(machineId);
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Machine ID.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
