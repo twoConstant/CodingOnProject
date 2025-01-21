@@ -62,7 +62,7 @@ namespace Project.Repository
                     WHERE 1=1
                 ");
 
-                // 필터 조건 추가
+                // 동적 필터 조건 추가
                 if (!string.IsNullOrEmpty(manufacturer))
                 {
                     query.Append(" AND Machine.device_manufacturer = @manufacturer");
@@ -70,7 +70,7 @@ namespace Project.Repository
 
                 if (!string.IsNullOrEmpty(deviceType))
                 {
-                    query.Append(" AND Machine.device_name = @deviceType");
+                    query.Append(" AND Machine.type = @deviceType");
                 }
 
                 if (!string.IsNullOrEmpty(state))
@@ -78,23 +78,32 @@ namespace Project.Repository
                     query.Append(" AND MetaLatest.state = @state");
                 }
 
+                // 쿼리 디버깅 출력
+                Console.WriteLine("===== SQL Query =====");
+                Console.WriteLine(query.ToString());
+
                 using (var command = new MySqlCommand(query.ToString(), connection))
                 {
-                    // 동적 파라미터 설정
+                    // 파라미터 값 추가 및 디버깅
                     if (!string.IsNullOrEmpty(manufacturer))
                     {
                         command.Parameters.AddWithValue("@manufacturer", manufacturer);
+                        Console.WriteLine($"@manufacturer: {manufacturer}");
                     }
 
                     if (!string.IsNullOrEmpty(deviceType))
                     {
                         command.Parameters.AddWithValue("@deviceType", deviceType);
+                        Console.WriteLine($"@deviceType: {deviceType}");
                     }
 
                     if (!string.IsNullOrEmpty(state))
                     {
                         command.Parameters.AddWithValue("@state", state);
+                        Console.WriteLine($"@state: {state}");
                     }
+
+                    Console.WriteLine("=====================");
 
                     using (var reader = command.ExecuteReader())
                     {
