@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,34 +20,20 @@ namespace Project.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly MachineViewModel _viewModel;
+        private readonly MainViewModel _viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
 
             // Repository와 ViewModel 초기화
-            IMachineRepository repository = new MachineRepository();
-            MachineViewModel viewModel = new MachineViewModel(repository);
-            _viewModel = viewModel;
+            IMachineCurrStateRepository machineCurrStateRepository = new MachineCurrStateRepository();
+            _viewModel = new MainViewModel(machineCurrStateRepository);
 
             // ViewModel을 DataContext에 바인딩
             DataContext = _viewModel;
-        }
+            Console.WriteLine("DataContext is set to MainViewModel");
 
-        private void OnLoadButtonClick(object sender, RoutedEventArgs e)
-        {
-            int machineId;
-
-            // 입력값 검증
-            if (int.TryParse(MachineIdInput.Text, out machineId))
-            {
-                _viewModel.LoadMachineById(machineId);
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Machine ID.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
     }
 }
