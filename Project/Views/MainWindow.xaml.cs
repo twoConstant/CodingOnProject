@@ -24,10 +24,12 @@ namespace Project.Views
         public MainWindow()
         {
             InitializeComponent();
+            // SensorDataViewModel 인스턴스 생성
+            SensorDataViewModel sensorDataViewModel = new SensorDataViewModel();
 
             // Repository와 ViewModel 초기화
             IMachineRepository repository = new MachineRepository();
-            MachineViewModel viewModel = new MachineViewModel(repository);
+            MachineViewModel viewModel = new MachineViewModel(repository, sensorDataViewModel);
             _viewModel = viewModel;
 
             // ViewModel을 DataContext에 바인딩

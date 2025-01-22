@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dapper;
 using System.Data;
-using System.Data.SqlClient;
-using Project.Data;
 using MySql.Data.MySqlClient;
+using Project.Data;
 using Project.Models;
 
 namespace Project.Repository
@@ -21,7 +16,7 @@ namespace Project.Repository
             this.connectionString = DatabaseHelper.GetConnection().ConnectionString;
         }
 
-        // DB Connection 연결
+        // DB Connection
         private MySqlConnection GetOpenConnection()
         {
             var connection = new MySqlConnection(this.connectionString);
@@ -29,124 +24,50 @@ namespace Project.Repository
             return connection;
         }
 
-        // metaInfoId로 SensorData 조회
-        public SensorData FindSensorDataById(int metaInfoId)
+        // 중복 제거된 SensorData 조회 (machineId 기반)
+        public List<SensorData> FindSensorDataByMachineId(int machineId)
         {
-            SensorData sensorData = null;
+            List<SensorData> sensorDataList = new List<SensorData>();
 
-            // DB Connection 연결
             using (var connection = GetOpenConnection())
             {
-                // SQL Query 작성
                 string query = @"
-            SELECT meta_info_id, ntc, pm10, pm2_5, pm1_0, ct1, ct2, ct3, ct4
-            FROM sensor_data
-            WHERE meta_info_id = @metaInfoId";
+                    SELECT 
+                        sd.meta_info_id,
+                        mi.collection_date_time,
+                        sd.ntc, sd.pm10, sd.pm2_5, sd.pm1_0, 
+                        sd.ct1, sd.ct2, sd.ct3, sd.ct4
+                    FROM 
+                        sensor_data sd
+                    JOIN 
+                        meta_info mi ON sd.meta_info_id = mi.meta_info_id
+                    WHERE 
+                        mi.machine_id = @machineId
+                        AND mi.meta_info_id = (
+                            SELECT MAX(meta_info_id)
+                            FROM meta_info
+                            WHERE collection_date_time = mi.collection_date_time
+                              AND machine_id = @machineId
+                        )
+                    ORDER BY 
+                        mi.collection_date_time;";
 
                 using (var command = new MySqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@metaInfoId", metaInfoId);
+                    // 파라미터 추가
+                    command.Parameters.AddWithValue("@machineId", machineId);
 
                     using (var reader = command.ExecuteReader())
                     {
-                        if (reader.Read())
+                        while (reader.Read())
                         {
-                            sensorData = MapReaderTosensorData(reader);
+                            sensorDataList.Add(MapReaderTosensorData(reader));
                         }
                     }
                 }
             }
-            return sensorData;
-        }
 
-        // metaInfoId로 Ntc 조회
-        public SensorData FindNtcById(int metaInfoId)
-        {
-            SensorData sensorData = null;
-
-            // DB Connection 연결
-            using (var connection = GetOpenConnection())
-            {
-                // SQL Query 작성
-                string query = @"
-            SELECT meta_info_id, ntc
-            FROM sensor_data
-            WHERE meta_info_id = @metaInfoId";
-
-                using (var command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@metaInfoId", metaInfoId);
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            sensorData = MapReaderTosensorData(reader);
-                        }
-                    }
-                }
-            }
-            return sensorData;
-        }
-
-        // metaInfoId로 Pm 조회
-        public SensorData FindPmById(int metaInfoId)
-        {
-            SensorData sensorData = null;
-
-            // DB Connection 연결
-            using (var connection = GetOpenConnection())
-            {
-                // SQL Query 작성
-                string query = @"
-            SELECT meta_info_id, pm10, pm2_5, pm1_0
-            FROM sensor_data
-            WHERE meta_info_id = @metaInfoId";
-
-                using (var command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@metaInfoId", metaInfoId);
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            sensorData = MapReaderTosensorData(reader);
-                        }
-                    }
-                }
-            }
-            return sensorData;
-        }
-
-        // metaInfoId로 Ct 조회
-        public SensorData FindCtById(int metaInfoId)
-        {
-            SensorData sensorData = null;
-
-            // DB Connection 연결
-            using (var connection = GetOpenConnection())
-            {
-                // SQL Query 작성
-                string query = @"
-            SELECT meta_info_id, ct1, ct2, ct3, ct4
-            FROM sensor_data
-            WHERE meta_info_id = @metaInfoId";
-
-                using (var command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@metaInfoId", metaInfoId);
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            sensorData = MapReaderTosensorData(reader);
-                        }
-                    }
-                }
-            }
-            return sensorData;
+            return sensorDataList;
         }
 
         private SensorData MapReaderTosensorData(MySqlDataReader reader)
@@ -154,6 +75,7 @@ namespace Project.Repository
             return new SensorData
             {
                 MetaInfoId = reader.GetInt32("meta_info_id"),
+                CollectionDateTime = reader.GetDateTime("collection_date_time"),
                 Ntc = reader.GetDouble("ntc"),
                 Pm10 = reader.GetDouble("pm10"),
                 Pm2_5 = reader.GetDouble("pm2_5"),
@@ -161,7 +83,7 @@ namespace Project.Repository
                 Ct1 = reader.GetDouble("ct1"),
                 Ct2 = reader.GetDouble("ct2"),
                 Ct3 = reader.GetDouble("ct3"),
-                Ct4 = reader.GetDouble("ct4"),
+                Ct4 = reader.GetDouble("ct4")
             };
         }
     }

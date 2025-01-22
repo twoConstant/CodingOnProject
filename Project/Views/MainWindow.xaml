@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:Project"
-        Title="Sensor Dashboard" Height="600" Width="800">
+        Title="Sensor Dashboard" Height="600" Width="900">
 
     <Grid>
-        <TabControl>
+        <TabControl RenderTransformOrigin="0.783,0.369">
             <!-- Tab 1: Machine Information -->
             <TabItem Header="Machine Information">
                 <Grid Margin="10">
@@ -45,36 +45,51 @@
                 <Grid>
                     <StackPanel Orientation="Vertical">
                         <!-- Header -->
+                        <TextBlock Text="Machine ID:" />
+                        <TextBlock Text="{Binding Machine.MachineId}" FontSize="10" Margin="10,0,0,0" />
                         <TextBlock Text="Device ID:" />
-                        <TextBlock Text="{Binding Machine.DeviceId}" FontSize="16" Margin="10" />
+                        <TextBlock Text="{Binding Machine.DeviceId}" FontSize="10" Margin="10,0,0,0" />
                         <TextBlock Text="Manufacturer:" />
-                        <TextBlock Text="{Binding Machine.DeviceManufacturer}" FontSize="16" Margin="10" />
+                        <TextBlock Text="{Binding Machine.DeviceManufacturer}" FontSize="10" Margin="10,0,0,0" />
                         <TextBlock Text="Device Name:" />
-                        <TextBlock Text="{Binding Machine.DeviceName}" FontSize="16" Margin="10" />
-                        <TextBlock Text="가동상태: ON" FontSize="16" Margin="10" />
-                        <Ellipse Width="50" Height="50" Fill="Red" />
+                        <TextBlock Text="{Binding Machine.DeviceName}" FontSize="10" Margin="10,0,0,0" />
+                        <TextBlock Text="가동상태: ON" FontSize="10" Margin="10,0,0,0" />
 
                         <!-- Charts Section -->
-                        <StackPanel Orientation="Horizontal" Margin="20">
+                        <StackPanel Orientation="Horizontal" Margin="20" Height="250">
+                            <!-- NTC Graph -->
                             <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
-                                <TextBlock Text="NTC (판매량)" HorizontalAlignment="Center" Margin="10" />
-                                <!-- Add Chart Control Here -->
+                                <lvc:CartesianChart Series="{Binding SensorDataViewModel.NtcValues}" Width="250">
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Title="Time" Labels="{Binding SensorDataViewModel.TimeLabels}" />
+                                    </lvc:CartesianChart.AxisX>
+                                </lvc:CartesianChart>
                             </Border>
+                            <!-- PM Graphs -->
                             <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
-                                <TextBlock Text="PM" HorizontalAlignment="Center" Margin="10" />
-                                <!-- Add Chart Control Here -->
+                                <lvc:CartesianChart Series="{Binding SensorDataViewModel.PmValues}" Width="250">
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Title="Time" Labels="{Binding SensorDataViewModel.TimeLabels}" />
+                                    </lvc:CartesianChart.AxisX>
+                                </lvc:CartesianChart>
                             </Border>
-                            <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
-                                <TextBlock Text="CT" HorizontalAlignment="Center" Margin="10" />
-                                <!-- Add Chart Control Here -->
-                            </Border>
-                        </StackPanel>
 
+                            <!-- CT Graphs -->
+                            <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
+                                <lvc:CartesianChart Series="{Binding SensorDataViewModel.CtValues}" Width="250">
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Title="Time" Labels="{Binding SensorDataViewModel.TimeLabels}" />
+                                    </lvc:CartesianChart.AxisX>
+                                </lvc:CartesianChart>
+                            </Border>
+
+                        </StackPanel>
                         <!-- Load Data Button -->
                         <Button Content="Load Data" Command="{Binding LoadDataCommand}" CommandParameter="1" Margin="10" />
                     </StackPanel>
                 </Grid>
             </TabItem>
+
         </TabControl>
     </Grid>
 </Window>
