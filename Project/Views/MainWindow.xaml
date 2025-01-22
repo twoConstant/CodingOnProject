@@ -1,39 +1,80 @@
 ﻿<Window x:Class="Project.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:Project"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="10">
-        <StackPanel>
-            <!-- Title -->
-            <TextBlock Text="Machine Information" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" />
+        Title="Sensor Dashboard" Height="600" Width="800">
 
-            <!-- Machine ID 입력 -->
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Machine ID:" VerticalAlignment="Center" Margin="0,0,10,0" />
-                <TextBox x:Name="MachineIdInput" Width="200" />
-                <Button Content="Load" Margin="10,0,0,0" Click="OnLoadButtonClick" />
-            </StackPanel>
+    <Grid>
+        <TabControl>
+            <!-- Tab 1: Machine Information -->
+            <TabItem Header="Machine Information">
+                <Grid Margin="10">
+                    <StackPanel>
+                        <!-- Title -->
+                        <TextBlock Text="Machine Information" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" />
 
-            <!-- Machine 데이터 표시 -->
-            <TextBlock Text="Machine ID:" />
-            <TextBlock Text="{Binding Machine.MachineId}" />
+                        <!-- Machine ID 입력 -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock Text="Machine ID:" VerticalAlignment="Center" Margin="0,0,10,0" />
+                            <TextBox x:Name="MachineIdInput" Width="200" />
+                            <Button Content="Load" Margin="10,0,0,0" Click="OnLoadButtonClick" />
+                        </StackPanel>
 
-            <TextBlock Text="Device ID:" />
-            <TextBlock Text="{Binding Machine.DeviceId}" />
+                        <!-- Machine 데이터 표시 -->
+                        <TextBlock Text="Machine ID:" />
+                        <TextBlock Text="{Binding Machine.MachineId}" />
 
-            <TextBlock Text="Manufacturer:" />
-            <TextBlock Text="{Binding Machine.DeviceManufacturer}" />
+                        <TextBlock Text="Device ID:" />
+                        <TextBlock Text="{Binding Machine.DeviceId}" />
 
-            <TextBlock Text="Device Name:" />
-            <TextBlock Text="{Binding Machine.DeviceName}" />
+                        <TextBlock Text="Manufacturer:" />
+                        <TextBlock Text="{Binding Machine.DeviceManufacturer}" />
 
-            <TextBlock Text="Type:" />
-            <TextBlock Text="{Binding Machine.Type}" />
-        </StackPanel>
+                        <TextBlock Text="Device Name:" />
+                        <TextBlock Text="{Binding Machine.DeviceName}" />
+
+                        <TextBlock Text="Type:" />
+                        <TextBlock Text="{Binding Machine.Type}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 2: Sensor Dashboard -->
+            <TabItem Header="Sensor Dashboard">
+                <Grid>
+                    <StackPanel Orientation="Vertical">
+                        <!-- Header -->
+                        <TextBlock Text="Device ID:" />
+                        <TextBlock Text="{Binding Machine.DeviceId}" FontSize="16" Margin="10" />
+                        <TextBlock Text="Manufacturer:" />
+                        <TextBlock Text="{Binding Machine.DeviceManufacturer}" FontSize="16" Margin="10" />
+                        <TextBlock Text="Device Name:" />
+                        <TextBlock Text="{Binding Machine.DeviceName}" FontSize="16" Margin="10" />
+                        <TextBlock Text="가동상태: ON" FontSize="16" Margin="10" />
+                        <Ellipse Width="50" Height="50" Fill="Red" />
+
+                        <!-- Charts Section -->
+                        <StackPanel Orientation="Horizontal" Margin="20">
+                            <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
+                                <TextBlock Text="NTC (판매량)" HorizontalAlignment="Center" Margin="10" />
+                                <!-- Add Chart Control Here -->
+                            </Border>
+                            <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
+                                <TextBlock Text="PM" HorizontalAlignment="Center" Margin="10" />
+                                <!-- Add Chart Control Here -->
+                            </Border>
+                            <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
+                                <TextBlock Text="CT" HorizontalAlignment="Center" Margin="10" />
+                                <!-- Add Chart Control Here -->
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Load Data Button -->
+                        <Button Content="Load Data" Command="{Binding LoadDataCommand}" CommandParameter="1" Margin="10" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
