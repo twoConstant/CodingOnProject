@@ -39,9 +39,14 @@ namespace Project.Repository
             {
                 // SQL Query 작성
                 string query = @"
-                    SELECT machine_id, device_id, device_manufacturer, device_name, type
-                    FROM machine
-                    WHERE machine_id = @machineId";
+            SELECT machine_id, device_id, device_manufacturer, device_name, type
+            FROM machine
+            WHERE machine_id = @machineId";
+
+                // 로깅: 매개변수와 쿼리 출력
+                Console.WriteLine("===== SQL Query Execution =====");
+                Console.WriteLine($"Query: {query}");
+                Console.WriteLine($"Parameter: @machineId = {machineId}");
 
                 using (var command = new MySqlCommand(query, connection))
                 {
@@ -49,16 +54,26 @@ namespace Project.Repository
 
                     using (var reader = command.ExecuteReader())
                     {
-                        if ( reader.Read())
+                        if (reader.Read())
                         {
                             machine = MapReaderToMachine(reader);
                         }
                     }
                 }
-                
             }
-            return machine;
 
+            // 로깅: 반환된 결과
+            Console.WriteLine("===== Query Result =====");
+            if (machine != null)
+            {
+                Console.WriteLine($"Machine Found: ID={machine.MachineId}, DeviceID={machine.DeviceId}, Manufacturer={machine.DeviceManufacturer}");
+            }
+            else
+            {
+                Console.WriteLine("No Machine Found for the given ID.");
+            }
+
+            return machine;
         }
 
         private Machine MapReaderToMachine(MySqlDataReader reader)

@@ -14,11 +14,17 @@ namespace Project.ViewModels
     {
         public MachineCurrStateViewModel MachineCurrStateViewModel { get; }
         public TimeViewModel TimeViewModel { get; }
+        public MachineViewModel MachineViewModel { get; }
 
 
-        public MainViewModel(IMachineCurrStateRepository machineCurrStateRepository)
+        public MainViewModel(
+                IMachineCurrStateRepository machineCurrStateRepository,
+                IMachineRepository machineRepository,
+                SensorDataViewModel sensorDataViewModel
+            )
         {
             MachineCurrStateViewModel = new MachineCurrStateViewModel(machineCurrStateRepository);
+            MachineViewModel = new MachineViewModel(machineRepository, sensorDataViewModel);
             TimeViewModel = new TimeViewModel();
 
         }

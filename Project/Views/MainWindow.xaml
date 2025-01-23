@@ -3,148 +3,248 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:Project.Converters"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Dashboard" Height="600" Width="900">
+
     <Window.Resources>
         <!-- Converters 등록 -->
         <local:TypeToTextConverter x:Key="TypeToTextConverter" />
         <local:StateToTextConverter x:Key="StateToTextConverter" />
         <local:StateToColorConverter x:Key="StateToColorConverter" />
     </Window.Resources>
-
     <Grid>
-        <!-- Row 정의 -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <!-- 상단 날짜 및 시간 -->
-            <RowDefinition Height="Auto" />
-            <!-- 필터 버튼 -->
-            <RowDefinition Height="*" />
-            <!-- 데이터 테이블 -->
-        </Grid.RowDefinitions>
+        <TabControl RenderTransformOrigin="0.783,0.369">
+            <!-- Tab 1: Machine Information -->
+            <TabItem Header="Machine Information">
+                <Grid Margin="10">
+                        <!-- Row 정의 -->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <!-- 상단 날짜 및 시간 -->
+                            <RowDefinition Height="Auto" />
+                            <!-- 필터 버튼 -->
+                            <RowDefinition Height="*" />
+                            <!-- 데이터 테이블 -->
+                        </Grid.RowDefinitions>
 
-        <!-- 상단 날짜 및 시간 -->
-        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
-            <!-- 현재 날짜 및 시간은 TimeViewModel에서 가져옴 -->
-            <TextBlock Text="{Binding TimeViewModel.CurrentDate}" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       TextAlignment="Center" 
-                       Margin="0,0,0,5" />
-            <TextBlock Text="{Binding TimeViewModel.CurrentTime}" 
-                       FontSize="20" 
-                       TextAlignment="Center" />
-        </StackPanel>
+                        <!-- 상단 날짜 및 시간 -->
+                        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
+                            <!-- 현재 날짜 및 시간은 TimeViewModel에서 가져옴 -->
+                            <TextBlock Text="{Binding TimeViewModel.CurrentDate}" 
+                                FontSize="24" 
+                                FontWeight="Bold" 
+                                TextAlignment="Center" 
+                                Margin="0,0,0,5" />
+                            <TextBlock Text="{Binding TimeViewModel.CurrentTime}" 
+                               FontSize="20" 
+                               TextAlignment="Center" />
+                        </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,20">
-            <!-- 제조사 필터 -->
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
-                <TextBlock Text="제조사" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
-                <ComboBox Width="120" Height="40"
-                  SelectedValue="{Binding MachineCurrStateViewModel.SelectedManufacturer, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedValuePath="Content">
-                    <ComboBoxItem Content="전체선택" IsSelected="True" />
-                    <ComboBoxItem Content="A" />
-                    <ComboBoxItem Content="B" />
-                    <ComboBoxItem Content="C" />
-                </ComboBox>
-            </StackPanel>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,20">
+                            <!-- 제조사 필터 -->
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
+                                <TextBlock Text="제조사" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
+                                <ComboBox Width="120" Height="40"
+                                      SelectedValue="{Binding MachineCurrStateViewModel.SelectedManufacturer, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedValuePath="Content">
+                                    <ComboBoxItem Content="전체선택" IsSelected="True" />
+                                    <ComboBoxItem Content="A" />
+                                    <ComboBoxItem Content="B" />
+                                    <ComboBoxItem Content="C" />
+                                </ComboBox>
+                            </StackPanel>
 
-            <!-- 장비유형 필터 -->
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
-                <TextBlock Text="장비유형" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
-                <ComboBox Width="120" Height="40"
-              SelectedValue="{Binding MachineCurrStateViewModel.SelectedDeviceType, UpdateSourceTrigger=PropertyChanged}"
-              SelectedValuePath="Tag">
-                    <ComboBoxItem Content="전체선택" Tag="전체선택" IsSelected="True" />
-                    <ComboBoxItem Content="AVG" Tag="1" />
-                    <ComboBoxItem Content="OHP" Tag="2" />
-                </ComboBox>
-            </StackPanel>
+                            <!-- 장비유형 필터 -->
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
+                                <TextBlock Text="기기유형" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
+                                <ComboBox Width="120" Height="40"
+                                  SelectedValue="{Binding MachineCurrStateViewModel.SelectedDeviceType, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValuePath="Tag">
+                                    <ComboBoxItem Content="전체선택" Tag="전체선택" IsSelected="True" />
+                                    <ComboBoxItem Content="AVG" Tag="1" />
+                                    <ComboBoxItem Content="OHP" Tag="2" />
+                                </ComboBox>
+                            </StackPanel>
 
-            <!-- 장비상태 필터 -->
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
-                <TextBlock Text="장비상태" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
-                <ComboBox Width="120" Height="40"
-              SelectedValue="{Binding MachineCurrStateViewModel.SelectedState, UpdateSourceTrigger=PropertyChanged}"
-              SelectedValuePath="Tag">
-                    <ComboBoxItem Content="전체선택" Tag="전체선택" IsSelected="True" />
-                    <ComboBoxItem Content="정상 상태" Tag="0" />
-                    <ComboBoxItem Content="관심 상태" Tag="1" />
-                    <ComboBoxItem Content="경고 상태" Tag="2" />
-                    <ComboBoxItem Content="위험 상태" Tag="3" />
-                </ComboBox>
-            </StackPanel>
+                            <!-- 장비상태 필터 -->
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
+                                <TextBlock Text="장비상태" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
+                                <ComboBox Width="120" Height="40"
+                                  SelectedValue="{Binding MachineCurrStateViewModel.SelectedState, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValuePath="Tag">
+                                    <ComboBoxItem Content="전체선택" Tag="전체선택" IsSelected="True" />
+                                    <ComboBoxItem Content="정상 상태" Tag="0" />
+                                    <ComboBoxItem Content="관심 상태" Tag="1" />
+                                    <ComboBoxItem Content="경고 상태" Tag="2" />
+                                    <ComboBoxItem Content="위험 상태" Tag="3" />
+                                </ComboBox>
+                            </StackPanel>
 
-            <!-- 조회 버튼 -->
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
-                <TextBlock Text=" " FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,5" />
-                <Button Content="조회" Width="120" Height="40"
-                Command="{Binding MachineCurrStateViewModel.ApplyFilterCommand}" />
-            </StackPanel>
-        </StackPanel>
+                            <!-- 조회 버튼 -->
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
+                                <TextBlock Text=" " FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,5" />
+                                <Button Content="조회" Width="120" Height="40"
+                                    Command="{Binding MachineCurrStateViewModel.ApplyFilterCommand}" />
+                            </StackPanel>
+                        </StackPanel>
 
-        <!-- 데이터 테이블 -->
-        <Border Grid.Row="2" Background="WhiteSmoke" CornerRadius="15" BorderBrush="Gray" BorderThickness="2" Padding="10" Margin="10">
-            <DataGrid x:Name="MachineDataGrid"
-                      ItemsSource="{Binding MachineCurrStateViewModel.MachineStates}"
-                      AutoGenerateColumns="False"
-                      HeadersVisibility="Column"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"
-                      RowHeight="40"
-                      GridLinesVisibility="Horizontal"
-                      AlternatingRowBackground="LightGray"
-                      BorderThickness="0">
-                <DataGrid.Columns>
-                    <!-- 설비 번호 -->
-                    <DataGridTextColumn Header="설비명" Binding="{Binding DeviceId}" />
+                        <!-- 데이터 테이블 -->
+                        <Border Grid.Row="2" Background="WhiteSmoke" CornerRadius="15" BorderBrush="Gray" BorderThickness="2" Padding="10" Margin="10">
+                            <DataGrid x:Name="MachineDataGrid"
+                              ItemsSource="{Binding MachineCurrStateViewModel.MachineStates}"
+                              AutoGenerateColumns="False"
+                              HeadersVisibility="Column"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              RowHeight="40"
+                              GridLinesVisibility="Horizontal"
+                              AlternatingRowBackground="LightGray"
+                              BorderThickness="0">      
+                                <DataGrid.Columns>
+                                <!-- 설비 번호 -->
+                                <DataGridTemplateColumn Header="설비명">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DeviceId}" 
+                                                       HorizontalAlignment="Center" 
+                                                       VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
-                    <!-- 기기유형: Type == 1이면 AVG, 2면 OHP로 표시 -->
-                    <DataGridTemplateColumn Header="기기유형">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Type, Converter={StaticResource TypeToTextConverter}}" 
+                                <!-- 기기유형: Type == 1이면 AVG, 2면 OHP로 표시 -->
+                                    <DataGridTemplateColumn Header="기기유형">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Type, Converter={StaticResource TypeToTextConverter}}" 
                                            HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                    <!-- 가동상태: ON/OFF로 표시하며 색상을 수정 -->
-                    <DataGridTemplateColumn Header="가동상태">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding State, Converter={StaticResource StateToTextConverter}}" 
-                                           Foreground="{Binding State, Converter={StaticResource StateToColorConverter}}" 
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                                    <!-- 가동상태: ON/OFF로 표시하며 색상을 수정 -->
+                                    <DataGridTemplateColumn Header="가동상태">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding State, Converter={StaticResource StateToTextConverter}}" 
+                                                           Foreground="{Binding State, Converter={StaticResource StateToColorConverter}}" 
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                    <!-- 가동률: 프로그래스 바 안에 숫자 표시 -->
-                    <DataGridTemplateColumn Header="가동률(%)">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <ProgressBar Value="{Binding OperatingRate}" Minimum="0" Maximum="100" Height="20" VerticalAlignment="Center" />
-                                    <TextBlock Text="{Binding OperatingRate}" 
+                                    <!-- 가동률: 프로그래스 바 안에 숫자 표시 -->
+                                    <DataGridTemplateColumn Header="가동률(%)">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <ProgressBar Value="{Binding OperatingRate}" Minimum="0" Maximum="100" Height="20" VerticalAlignment="Center" />
+                                                    <TextBlock Text="{Binding OperatingRate}" 
                                                HorizontalAlignment="Center" VerticalAlignment="Center" 
                                                FontWeight="Bold" Foreground="Black" />
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                    <!-- NTC -->
-                    <DataGridTextColumn Header="NTC(℃)" Binding="{Binding Ntc}" />
+                                    <!-- NTC -->
+                                    <DataGridTextColumn Header="NTC(℃)" Binding="{Binding Ntc}" />
 
-                    <!-- PM10 -->
-                    <DataGridTextColumn Header="PM10(µg/m3)" Binding="{Binding Pm10}" />
+                                    <!-- PM10 -->
+                                    <DataGridTextColumn Header="PM10(µg/m3)" Binding="{Binding Pm10}" />
 
-                    <!-- CT1 -->
-                    <DataGridTextColumn Header="CT1(A)" Binding="{Binding Ct1}" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Border>
+                                    <!-- CT1 -->
+                                    <DataGridTextColumn Header="CT1(A)" Binding="{Binding Ct1}" />
+                                    
+                                <!-- 업데이트 버튼 -->
+                                <DataGridTemplateColumn Header="작업">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="조회" 
+                                                        Command="{Binding DataContext.MachineViewModel.UpdateTag2Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}" 
+                                                        Tag="{Binding}"
+                                                        Click="OnDeviceIdClick" 
+                                                    />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                    
+                            </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+            </TabItem>
+
+            <!-- Tab 2: Sensor Dashboard -->
+            <TabItem Header="Sensor Data">
+                <Grid Background="#F7F9FC" Width="901">
+                    <StackPanel Orientation="Vertical" Margin="20">
+                        <!-- Header Section -->
+                        <Border Background="White" Padding="20" CornerRadius="10" Margin="0,0,0,20">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="설비 정보" FontSize="20" FontWeight="Bold" Margin="0,0,30,10" />
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel>
+                                        <TextBlock Text="설비명" FontWeight="Bold" FontSize="15" Margin="0,0,30,10"/>
+                                        <TextBlock Text="{Binding MachineViewModel.Machine.DeviceId}" FontSize="15" FontWeight="Bold" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="제조사" FontWeight="Bold" FontSize="15" Margin="0,0,30,10"/>
+                                        <TextBlock Text="{Binding MachineViewModel.Machine.DeviceManufacturer}" FontSize="15" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="장비유형" FontWeight="Bold" FontSize="15" Margin="0,0,30,10"/>
+                                        <TextBlock Text="{Binding MachineViewModel.Machine.DeviceName}" FontSize="15" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Charts Section -->
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Sensor Data" FontSize="20" FontWeight="Bold" Margin="10,30,0,10" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                                <!-- NTC Graph -->
+                                <Border Background="White" Padding="10" CornerRadius="10" Margin="0,0,20,0">
+                                    <StackPanel>
+                                        <TextBlock Text="NTC Graph" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+                                        <lvc:CartesianChart Series="{Binding MachineViewModel.SensorDataViewModel.NtcValues}" Height="200" Width="250">
+                                            <lvc:CartesianChart.AxisX>
+                                                <lvc:Axis Title="Time" Labels="{Binding MachineViewModel.SensorDataViewModel.TimeLabels}" />
+                                            </lvc:CartesianChart.AxisX>
+                                        </lvc:CartesianChart>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- PM Graph -->
+                                <Border Background="White" Padding="10" CornerRadius="10" Margin="0,0,20,0">
+                                    <StackPanel>
+                                        <TextBlock Text="PM Graph" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+                                        <lvc:CartesianChart Series="{Binding MachineViewModel.SensorDataViewModel.PmValues}" Height="200" Width="250">
+                                            <lvc:CartesianChart.AxisX>
+                                                <lvc:Axis Title="Time" Labels="{Binding MachineViewModel.SensorDataViewModel.TimeLabels}" />
+                                            </lvc:CartesianChart.AxisX>
+                                        </lvc:CartesianChart>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- CT Graph -->
+                                <Border Background="White" Padding="10" CornerRadius="10">
+                                    <StackPanel>
+                                        <TextBlock Text="CT Graph" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+                                        <lvc:CartesianChart Series="{Binding MachineViewModel.SensorDataViewModel.CtValues}" Height="200" Width="250">
+                                            <lvc:CartesianChart.AxisX>
+                                                <lvc:Axis Title="Time" Labels="{Binding MachineViewModel.SensorDataViewModel.TimeLabels}" />
+                                            </lvc:CartesianChart.AxisX>
+                                        </lvc:CartesianChart>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
