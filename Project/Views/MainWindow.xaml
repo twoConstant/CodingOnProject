@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:Project.Converters"
-        Title="Sensor Dashboard" Height="600" Width="900">
+        Title="Dashboard" Height="600" Width="900">
 
     <Window.Resources>
         <!-- Converters 등록 -->
@@ -55,7 +55,7 @@
 
                             <!-- 장비유형 필터 -->
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
-                                <TextBlock Text="장비유형" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
+                                <TextBlock Text="기기유형" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
                                 <ComboBox Width="120" Height="40"
                                   SelectedValue="{Binding MachineCurrStateViewModel.SelectedDeviceType, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedValuePath="Tag">
@@ -177,53 +177,74 @@
             </TabItem>
 
             <!-- Tab 2: Sensor Dashboard -->
-            <TabItem Header="Sensor Dashboard">
-                <Grid>
-                    <StackPanel Orientation="Vertical">
-                        <!-- Header -->
-                        <TextBlock Text="Machine ID:" />
-                        <TextBlock Text="{Binding MachineViewModel.Machine.MachineId}" FontSize="10" Margin="10,0,0,0" />
-                        <TextBlock Text="Device ID:" />
-                        <TextBlock Text="{Binding MachineViewModel.Machine.DeviceId}" FontSize="10" Margin="10,0,0,0" />
-                        <TextBlock Text="Manufacturer:" />
-                        <TextBlock Text="{Binding MachineViewModel.Machine.DeviceManufacturer}" FontSize="10" Margin="10,0,0,0" />
-                        <TextBlock Text="Device Name:" />
-                        <TextBlock Text="{Binding MachineViewModel.Machine.DeviceName}" FontSize="10" Margin="10,0,0,0" />
+            <TabItem Header="Sensor Data">
+                <Grid Background="#F7F9FC" Width="901">
+                    <StackPanel Orientation="Vertical" Margin="20">
+                        <!-- Header Section -->
+                        <Border Background="White" Padding="20" CornerRadius="10" Margin="0,0,0,20">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="설비 정보" FontSize="20" FontWeight="Bold" Margin="0,0,30,10" />
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel>
+                                        <TextBlock Text="설비명" FontWeight="Bold" FontSize="15" Margin="0,0,30,10"/>
+                                        <TextBlock Text="{Binding MachineViewModel.Machine.DeviceId}" FontSize="15" FontWeight="Bold" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="제조사" FontWeight="Bold" FontSize="15" Margin="0,0,30,10"/>
+                                        <TextBlock Text="{Binding MachineViewModel.Machine.DeviceManufacturer}" FontSize="15" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="장비유형" FontWeight="Bold" FontSize="15" Margin="0,0,30,10"/>
+                                        <TextBlock Text="{Binding MachineViewModel.Machine.DeviceName}" FontSize="15" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
                         <!-- Charts Section -->
-                        <StackPanel Orientation="Horizontal" Margin="20" Height="250">
-                            <!-- NTC Graph -->
-                            <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
-                                <lvc:CartesianChart Series="{Binding SensorDataViewModel.NtcValues}" Width="250">
-                                    <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Title="Time" Labels="{Binding SensorDataViewModel.TimeLabels}" />
-                                    </lvc:CartesianChart.AxisX>
-                                </lvc:CartesianChart>
-                            </Border>
-                            <!-- PM Graphs -->
-                            <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
-                                <lvc:CartesianChart Series="{Binding SensorDataViewModel.PmValues}" Width="250">
-                                    <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Title="Time" Labels="{Binding SensorDataViewModel.TimeLabels}" />
-                                    </lvc:CartesianChart.AxisX>
-                                </lvc:CartesianChart>
-                            </Border>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Sensor Data" FontSize="20" FontWeight="Bold" Margin="10,30,0,10" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                                <!-- NTC Graph -->
+                                <Border Background="White" Padding="10" CornerRadius="10" Margin="0,0,20,0">
+                                    <StackPanel>
+                                        <TextBlock Text="NTC Graph" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+                                        <lvc:CartesianChart Series="{Binding MachineViewModel.SensorDataViewModel.NtcValues}" Height="200" Width="250">
+                                            <lvc:CartesianChart.AxisX>
+                                                <lvc:Axis Title="Time" Labels="{Binding MachineViewModel.SensorDataViewModel.TimeLabels}" />
+                                            </lvc:CartesianChart.AxisX>
+                                        </lvc:CartesianChart>
+                                    </StackPanel>
+                                </Border>
 
-                            <!-- CT Graphs -->
-                            <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
-                                <lvc:CartesianChart Series="{Binding SensorDataViewModel.CtValues}" Width="250">
-                                    <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Title="Time" Labels="{Binding SensorDataViewModel.TimeLabels}" />
-                                    </lvc:CartesianChart.AxisX>
-                                </lvc:CartesianChart>
-                            </Border>
+                                <!-- PM Graph -->
+                                <Border Background="White" Padding="10" CornerRadius="10" Margin="0,0,20,0">
+                                    <StackPanel>
+                                        <TextBlock Text="PM Graph" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+                                        <lvc:CartesianChart Series="{Binding MachineViewModel.SensorDataViewModel.PmValues}" Height="200" Width="250">
+                                            <lvc:CartesianChart.AxisX>
+                                                <lvc:Axis Title="Time" Labels="{Binding MachineViewModel.SensorDataViewModel.TimeLabels}" />
+                                            </lvc:CartesianChart.AxisX>
+                                        </lvc:CartesianChart>
+                                    </StackPanel>
+                                </Border>
 
+                                <!-- CT Graph -->
+                                <Border Background="White" Padding="10" CornerRadius="10">
+                                    <StackPanel>
+                                        <TextBlock Text="CT Graph" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+                                        <lvc:CartesianChart Series="{Binding MachineViewModel.SensorDataViewModel.CtValues}" Height="200" Width="250">
+                                            <lvc:CartesianChart.AxisX>
+                                                <lvc:Axis Title="Time" Labels="{Binding MachineViewModel.SensorDataViewModel.TimeLabels}" />
+                                            </lvc:CartesianChart.AxisX>
+                                        </lvc:CartesianChart>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
                         </StackPanel>
-                        <!-- Load Data Button -->
-                        <Button Content="Load Data" Command="{Binding MachineViewModel.SensorDataViewModel.LoadDataCommand}" CommandParameter="1" Margin="10" />
                     </StackPanel>
                 </Grid>
             </TabItem>
-
         </TabControl>
     </Grid>
 </Window>
