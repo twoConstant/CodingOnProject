@@ -31,12 +31,13 @@ namespace Project.Views
             _viewModel = viewModel;
 
             // ViewModel을 DataContext에 바인딩
-            DataContext = _viewModel;
+            DataContext = _viewModel;            
         }
 
         private void OnLoadButtonClick(object sender, RoutedEventArgs e)
         {
-            int machineId;
+            int machineId = 1;
+            string SensorValue = "ntc";
 
             // 입력값 검증
             if (int.TryParse(MachineIdInput.Text, out machineId))
@@ -47,6 +48,17 @@ namespace Project.Views
             {
                 MessageBox.Show("Please enter a valid Machine ID.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void OnOpenSensorDataPageClick(object sender, RoutedEventArgs e)
+        {
+            // Machine ID를 설정 (예: 12345)
+            int machineId = 1;
+            string SensorValue = "ntc";
+
+            // SensorDataPage 생성 및 Navigation
+            SensorDataPage sensorDataPage = new SensorDataPage(machineId, SensorValue);
+            MainFrame.Navigate(sensorDataPage);
         }
     }
 }

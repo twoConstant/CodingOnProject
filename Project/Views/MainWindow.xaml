@@ -35,5 +35,13 @@
             <TextBlock Text="Type:" />
             <TextBlock Text="{Binding Machine.Type}" />
         </StackPanel>
+
+        <!-- Frame for navigation -->
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+
+        <!-- Button to open SensorDataPage -->
+        <Button Content="Open Sensor Data Page" 
+                HorizontalAlignment="Center" VerticalAlignment="Center" 
+                Click="OnOpenSensorDataPageClick" Width="200" Height="50"/>
     </Grid>
 </Window>
