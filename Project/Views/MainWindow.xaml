@@ -160,7 +160,7 @@
                                 <DataGridTemplateColumn Header="작업">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Content="Update Tag2" 
+                                            <Button Content="조회" 
                                                         Command="{Binding DataContext.MachineViewModel.UpdateTag2Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                         CommandParameter="{Binding}" 
                                                         Tag="{Binding}"
